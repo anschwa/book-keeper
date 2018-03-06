@@ -93,3 +93,5 @@ Example error object:
 curl -u username:password localhost:8080/book/42
 >>> {"error": "Exception('Book Not Found',)"}
 #+END_SRC
+* Screenshot
+[[file:screenshot.png]]
