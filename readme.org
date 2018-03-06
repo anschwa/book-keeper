@@ -1,0 +1,95 @@
+#+TITLE: Book Keeper
+#+AUTHOR: Adam Schwartz
+#+DATE: February 26, 2018
+#+OPTIONS: ':true *:true toc:nil num:nil
+
+Book Keeper lets you keep track of what you're currently reading, what
+you want to read next, and what have finished reading. You can think
+of it like a todo-list for books.
+
+Safari doesn't seem to handle =DELETE= requsets properly, so I would
+recommend using Firefox or Chrome.
+
+- Framework: Bottle.py
+- Security: Basic Auth + bcrypt (OAuth and CSRF is out of the project scope)
+- Deployment: Heroku + PostgreSQL
+
+There is a [[https://limitless-inlet-11377.herokuapp.com/][live demo]] hosted on Heroku.
+
+* Development
+#+BEGIN_SRC text
+# heroku will provide this as an environment variable
+export DATABASE_URL=postgresql://[user[:password]@][netloc][:port][/dbname]
+
+# setup virtualenv and install dependencies
+pipenv install
+pipenv run app.py 8080
+#+END_SRC
+
+Deploy with: =git push heroku master=
+
+* API
+DataTypes:
+- Book Object: ={"title": "", "author": "", ...}=
+- Book Status: ={"status": "now|next|done"}=
+
+Demo Accounts:
+- username: =guest=, password: =sixtimesnine=
+- username: =admin=, password: =lifeuniverse=
+
+** =/book=
+*** GET (200)
+Fetch all books from your library:
+#+BEGIN_SRC text
+curl -u username:password localhost:8080/book
+>>> {"now": [...], "next": [...], "done": [...]}
+#+END_SRC
+
+*** POST (201)
+Add a new book to your library:
+#+BEGIN_SRC text
+curl -H "Content-Type: application/json" -X POST -u username:password \
+localhost:8080/book --data '{"book": {"title": "Ubik", "author": "Philip K. Dick"}, "status": "now"}'
+>>> {"book_id": 13, "book": {"title": "Ubik", "author": "Philip K. Dick"}, "status": "now"}
+#+END_SRC
+
+** =/book/{bookID}=
+*** GET (200)
+Fetch a specific book using its ID:
+#+BEGIN_SRC text
+curl -u username:password localhost:880/book/42
+>>> {"book_id": 42, "book": {"title": "1984", "author": "George Orwell"}, "status": "next"}
+#+END_SRC
+
+*** PATCH (200)
+Update some information about a book in your library:
+#+BEGIN_SRC text
+# [ { "op": "status", "value": "done" },
+#   { "op": "book", "value": {...} } ]
+#
+curl -H "Content-Type: application/json" -X PATCH -u username:password \
+localhost:8080/book/42 --data '[{"op":"status","value":"done"}]'
+>>> {"updated": [{"book_id": 42, "book": {"title": "1984", "author": "George Orwell"}, "status": "done"}]}
+#+END_SRC
+
+*** DELETE (204)
+Remove a book from your library:
+#+BEGIN_SRC text
+curl -x DELETE -u username:password localhost:8080/book/42
+>>>
+#+END_SRC
+
+** =/reset=
+Reset the database and add populate it with some demo data.
+Only the =admin= user can do this.
+#+BEGIN_SRC text
+curl -u admin:password localhost:8080/reset
+>>> {"success": "Database initialized."}
+#+END_SRC
+
+** Errors
+Example error object:
+#+BEGIN_SRC text
+curl -u username:password localhost:8080/book/42
+>>> {"error": "Exception('Book Not Found',)"}
+#+END_SRC

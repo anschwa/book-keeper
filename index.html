@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <title>Book Keeper - Keep Track of What You Read</title>
+    <meta name="viewport" content="initial-scale = 1.0" />
+    <link href="static/style.css" rel="stylesheet"/>
+    <script type="text/javascript" src="static/client.js"></script>
+  </head>
+  <body id="top">
+    <header>
+      <div class="masthead">
+        <h1>Book Keeper</h1>
+        <p>Keep track of what you read.</p>
+      </div>
+
+      <div class="login">
+        <span class="user">{{user}}</span> | <span id="logout" class="link">logout</span>
+      </div>
+    </header>
+    <div class="content">
+      <seciton>
+        <h2 id="add-h2">Add or Edit a Book</h2>
+        <div id="book-form">
+          <p>
+            <label for="title">Title:</label>
+            <input id="title" name="title" type="text" value="" placeholder="The Hitchhiker's Guide to the Galaxy" />
+          </p>
+          <p>
+            <label for="author">Author:</label>
+            <input id="author" name="author" type="text" value="" placeholder="Douglas Adams" />
+          </p>
+          <p class="radiogroup">
+            <label for="now">Currently Reading</label>
+            <input id="now" name="status" type="radio" value="now"/>
+
+            <label for="next">Read Next</label>
+            <input id="next" name="status" type="radio" value="next"/>
+
+            <label for="done">Finished Reading</label>
+            <input id="done" name="status" type="radio" value="done"/>
+          </p>
+
+          <input id="id" name="id" type="hidden" value=""/>
+
+          <button id="submit" class="btn">Update Database</button>
+        </div>
+      </seciton>
+      <div id="loading"><p>&hellip;</p></div>
+      <section id="now-section" class="book-list">
+        <h2>What I'm currently reading</h2>
+        <ol>
+          <!-- <li>
+               <div class="book">
+               <div class="info">
+               <span class="book-title">To Kill a Mockingbird</span>
+               &ndash;
+               <span class="book-author">Harper Lee</span>
+               </div>
+               <div class="ops">
+               <span class="edit">Edit</span> | <span class="delete">Delete</span>
+               <input class="book-id" type="hidden" value=""/>
+               </div>
+               </div>
+               </li> -->
+        </ol>
+      </section>
+      <section id="next-section" class="book-list">
+        <h2>What I want to read next</h2>
+        <ol></ol>
+      </section>
+      <section id="done-section" class="book-list">
+        <h2>What I've already read</h2>
+        <ol></ol>
+      </section>
+    </div>
+    <footer>
+      © <script>document.write(new Date().getFullYear());</script>
+      Adam Schwartz | <a href="https://github.com/anschwa/book-keeper">View on GitHub</a>
+    </footer>
+  </body>
+</html>
