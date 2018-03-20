@@ -64,7 +64,7 @@ curl -u username:password localhost:880/book/42
 *** PATCH (200)
 Update some information about a book in your library:
 #+BEGIN_SRC text
-# [ { "op": "status", "value": "done" },
+# [ { "op": "status", "value": "now|next|done" },
 #   { "op": "book", "value": {...} } ]
 #
 curl -H "Content-Type: application/json" -X PATCH -u username:password \
